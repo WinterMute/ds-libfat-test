@@ -24,16 +24,16 @@ int main(void) {
 	consoleDemoInit();
 	
 
-	printf("NDS FAT TEST V1.0\n");
-	printf("fatInit()..");
+	iprintf("NDS FAT TEST V1.0\n");
+	iprintf("fatInit()..");
 	if (fatInitDefault()) {
-		printf("\tSuccess\n");
+		iprintf("\tSuccess\n");
 		main_sub();
 
 		
 		char *buffer = malloc(256*1024);
 		if (buffer == NULL ) {
-			printf("Out of Memory!\n");
+			iprintf("Out of Memory!\n");
 			return 0;
 		}
 		char *buffer2 = buffer + 128 * 1024;
@@ -41,7 +41,7 @@ int main(void) {
 
 		
 		if (file == NULL) {
-			printf("File Create Error!\n");
+			iprintf("File Create Error!\n");
 			return 0;
 		}
 		
@@ -52,12 +52,12 @@ int main(void) {
 		fwrite(buffer,1,128*1024,file);
 		fclose(file);
 		u32 elapsed=cpuEndTiming();
-		printf("128k written in %d cycles.\n",elapsed);
+		iprintf("128k written in %d cycles.\n",elapsed);
 		
 		file = fopen("128k.tst","rb+");
 
 		if (file == NULL) {
-			printf("File Open Error!\n");
+			iprintf("File Open Error!\n");
 			return 0;
 		}
 		
@@ -78,12 +78,13 @@ int main(void) {
 		fclose(file);
 		
 		if (memcmp(buffer,buffer2,128*1024)) {
-			printf("write failed\n");
+			iprintf("write failed\n");
 		}
-		printf("done!\n");		
+		iprintf("done!\n");
 	} else {
-		printf("\tFailure\n");
+		iprintf("\tFailure\n");
 	}
+
 	printf("Test Complete!\n");
 	while(1) {
 		swiWaitForVBlank();
