@@ -81,6 +81,34 @@ int main(void) {
 			iprintf("write failed\n");
 		}
 		iprintf("done!\n");
+
+		file = fopen("attrib_test","wb");
+		fclose(file);
+
+		int attr = FAT_getAttr("attrib_test");
+		iprintf("initial attributes = %02x\n",attr);
+
+		int new_attr = ATTR_ARCHIVE;
+
+		FAT_setAttr("attrib_test",new_attr);
+		attr = FAT_getAttr("attrib_test");
+		iprintf("attributes set to %02x\n",attr);
+
+		new_attr |= ATTR_SYSTEM;
+		FAT_setAttr("attrib_test",new_attr);
+		attr = FAT_getAttr("attrib_test");
+		iprintf("attributes set to %02x\n",attr);
+
+		new_attr |= ATTR_HIDDEN;
+		FAT_setAttr("attrib_test",new_attr);
+		attr = FAT_getAttr("attrib_test");
+		iprintf("attributes set to %02x\n",attr);
+
+		new_attr |= ATTR_READONLY;
+		FAT_setAttr("attrib_test",new_attr);
+		attr = FAT_getAttr("attrib_test");
+		iprintf("attributes set to %02x\n",attr);
+
 	} else {
 		iprintf("\tFailure\n");
 	}
