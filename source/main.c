@@ -2,21 +2,25 @@
  *      by Diddl 2007
  *----------------------------------------------------------------------------*/
 
-#include <nds.h>
 #include <fat.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/statvfs.h>
 #include <stdbool.h>
-
+#include <stdint.h>
 #include <inttypes.h>
+
+void initialise();
+void waitForInput();
+void beginTiming();
+uint32_t endTiming();
 
 int main_sub(void);
 
 int timed_read(char *name, void *buffer, int size, bool buffered) {
 
-		cpuStartTiming(0);
+		beginTiming();
 
 		FILE *file = fopen(name,"rb");
 		if (!buffered) setvbuf(file, NULL , _IONBF, 0);
@@ -24,13 +28,14 @@ int timed_read(char *name, void *buffer, int size, bool buffered) {
 		fread(buffer,1,size,file);
 		fclose(file);
 
-		return cpuEndTiming();
+//		return cpuEndTiming();
 
+		return endTiming();
 }
 
 int timed_write(char *name, void *buffer, int size, bool buffered) {
 
-		cpuStartTiming(0);
+		beginTiming();
 
 		FILE *file = fopen(name,"wb");
 		if (!buffered) setvbuf(file, NULL , _IONBF, 0);
@@ -38,8 +43,9 @@ int timed_write(char *name, void *buffer, int size, bool buffered) {
 		fwrite(buffer,1,size,file);
 		fclose(file);
 
-		return cpuEndTiming();
+		return endTiming();
 
+		return 0;
 }
 
 
@@ -47,13 +53,9 @@ int timed_write(char *name, void *buffer, int size, bool buffered) {
 int main(void) {
 //---------------------------------------------------------------------------------
 
-	// install the default exception handler
-	defaultExceptionHandler();
+	initialise();
 
-	videoSetMode(0);	//not using the main screen
-	consoleDemoInit();
-
-	iprintf("NDS FAT TEST V1.0\n");
+	iprintf("libfat test V1.1\n");
 	iprintf("fatInit()..");
 	if (fatInitDefault()) {
 		iprintf("\tSuccess\n");
@@ -162,11 +164,8 @@ int main(void) {
 	}
 
 	printf("Test Complete!\n");
-	while(1) {
-		swiWaitForVBlank();
-		scanKeys();
-		if (keysDown() & KEY_START) break;
-	}
+
+	waitForInput();
 
 	return 0;
 }

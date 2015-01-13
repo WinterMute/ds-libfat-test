@@ -9,7 +9,6 @@
  *                                                                          *
  ****************************************************************************/
 
-#include <nds.h>
 #include <fat.h>
 #include <stdio.h>
 #include <string.h>
@@ -43,7 +42,7 @@ int SetBuffer(char *buf, int size, int type)
 	char *tst = "Das ist ein Teststring für fatlib";
 	char *p;
 
-	if(size <0 || size > BUF_SIZE)	
+	if(size <0 || size > BUF_SIZE)
 		size = BUF_SIZE;
 
 	switch(type)
@@ -158,7 +157,7 @@ int WriteConfuse(char *fnam)
 
 	fE = 0;
 	//FILE *log = fopen("confuse.log", FILE_CREATE);
-	
+
 	if((fh = fopen(fnam, FILE_CREATE)) != NULL)
 	{
 		for(i = 0; i <= ANZ_BLOCKS; ++i)
@@ -295,13 +294,13 @@ int ReadBackward(char *fnam)
 }
 
 int FileSize(char *fnam)
-{   
+{
 	FILE *fh;
 	long  size;
 
 	if((fh = fopen(fnam, FILE_READ)) != NULL)
 	{
-		fseek(fh, 0, SEEK_END); 
+		fseek(fh, 0, SEEK_END);
 		size = ftell(fh);
 		fclose(fh);
 	}
@@ -426,7 +425,7 @@ int RenameFile()
 	{
 		fputs(TEST_STRING, fh);
 		fclose(fh);
-		
+
 		remove("renamed.txt");
 		if ( rename("test.txt", "renamed.txt") != 0 ) return -1;
 		if (stat ("renamed.txt", &st) < 0) return -1;
@@ -500,7 +499,7 @@ int main_sub(void)
 	printf("\nRename test ... ");
 	if(RenameFile()) fEW=1;
 	else printf("ok");
-	
+
 	if(fEW == 0 && fER == 0)
 		printf("\nall tests ok!\n");
 	else if(fER == 0)
